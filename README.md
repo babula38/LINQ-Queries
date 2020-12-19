@@ -12,10 +12,12 @@ GROUP BY [e].[EmployeeId], [e].[FirstName], [e].[LastName]
 from employee in _employeeDbContext.Employees
 join incentive in _employeeDbContext.EmployeeIncentives
 on employee.EmployeeId equals incentive.EmployeeId into j1
-from j2 in j1.DefaultIfEmpty()
+from j2 in j1.DefaultIfEmpty()//Left outer join
 //let f = employee.FirstName + employee.LastName
+//Transfer the left outer join result to temp result set to do "Group by"
 let x = new { employee.EmployeeId, employee.FirstName, employee.LastName, j2.Incentive }
 
+//do group by
 group x by new { x.EmployeeId, x.FirstName, x.LastName } into grouped
 select new {
     grouped.Key,
